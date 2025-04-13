@@ -1,24 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import SplashScreen from './src/screens/loadingScreen';
+import LoadingScreen from './src/screens/loadingScreen';
 
 const App = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Hello from Rasadhi's App hey hey! 🚀</Text>
-    </View>
-  );
+  return <LoadingScreen />;
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 20,
-    color: 'blue',
-  },
-});
 
 export default App;
