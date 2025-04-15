@@ -9,43 +9,48 @@ const addTaskStyles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 50,
-    marginBottom: 30,
+    marginTop: 0,
+    marginBottom: 50,
   },
   toggleIcon: {
     width: 24,
     height: 24,
-    marginRight: 10,
+    marginTop: 0,
   },
-  screenTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    backgroundColor: 'transparent',
+    marginBottom: 30,
   },
-  inputContainer: {
-    backgroundColor: 'rgba(255,255,255,0.8)',
-    borderRadius: 12,
-    padding: 15,
+  inputsColumn: {
+    flex: 1,
   },
   input: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    marginBottom: 10,
+    borderWidth: 1.3,
+    borderColor: '#A66CFF',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    marginBottom: 12,
     fontSize: 16,
-    color: '#333',
+    color: '#fff',
+    backgroundColor: 'transparent',
   },
   plusButton: {
-    backgroundColor: '#3B71F3',
-    padding: 10,
-    borderRadius: 8,
+    backgroundColor: 'transparent',
+    borderWidth: 1.3,
+    borderColor: '#A66CFF',
+    borderRadius: 12,
+    paddingHorizontal: 30,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 5,
+    marginLeft: 10,
   },
   plusText: {
-    color: '#fff',
-    fontSize: 20,
+    color: '#A66CFF',
+    fontSize: 30,
+    fontWeight: 'bold',
   },
   noTasksText: {
     textAlign: 'center',
@@ -53,6 +58,39 @@ const addTaskStyles = StyleSheet.create({
     fontSize: 18,
     color: '#fff',
     fontStyle: 'italic',
+  },
+
+  // NEW STYLES
+  taskBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1.3,
+    borderColor: '#A66CFF',
+    borderRadius: 12,
+    padding: 10,
+    marginBottom: 12,
+    backgroundColor: 'transparent',
+  },
+  taskTextBox: {
+    flex: 1,
+    marginHorizontal: 10,
+  },
+  taskTitle: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  taskAbout: {
+    color: '#fff',
+    fontSize: 12,
+  },
+  completedText: {
+    textDecorationLine: 'line-through',
+    opacity: 0.6,
+  },
+  deleteIcon: {
+    fontSize: 18,
+    color: '#A66CFF',
   },
 });
 
