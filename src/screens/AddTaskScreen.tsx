@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import styles from '../styles/addTaskStyles';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Task = {
   id: number;
@@ -28,6 +29,37 @@ const AddTaskScreen = () => {
   const [about, setAbout] = useState('');
   const [tasks, setTasks] = useState<Task[]>([]);
   const [nextId, setNextId] = useState(1);
+
+  // 🧠 Load stored tasks on app start
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const savedTasks = await AsyncStorage.getItem('tasks');
+        const savedNextId = await AsyncStorage.getItem('nextId');
+
+        if (savedTasks) setTasks(JSON.parse(savedTasks));
+        if (savedNextId) setNextId(parseInt(savedNextId));
+      } catch (e) {
+        console.error('Failed to load tasks:', e);
+      }
+    };
+
+    loadTasks();
+  }, []);
+
+  // 💾 Save tasks every time they change
+  useEffect(() => {
+    const saveTasks = async () => {
+      try {
+        await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
+        await AsyncStorage.setItem('nextId', nextId.toString());
+      } catch (e) {
+        console.error('Failed to save tasks:', e);
+      }
+    };
+
+    saveTasks();
+  }, [tasks, nextId]);
 
   const handleAddTask = () => {
     if (title.trim() === '' || about.trim() === '') return;
@@ -67,7 +99,7 @@ const AddTaskScreen = () => {
           <View style={styles.header}>
             <Image source={require('../assets/toggle.png')} style={styles.toggleIcon} />
           </View>
-  
+
           <View style={styles.inputRow}>
             <View style={styles.inputsColumn}>
               <TextInput
@@ -85,12 +117,12 @@ const AddTaskScreen = () => {
                 placeholderTextColor="#A66CFF"
               />
             </View>
-  
+
             <TouchableOpacity style={styles.plusButton} onPress={handleAddTask}>
               <Text style={styles.plusText}>+</Text>
             </TouchableOpacity>
           </View>
-  
+
           <ScrollView
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingBottom: 100 }}
@@ -106,7 +138,7 @@ const AddTaskScreen = () => {
                       {task.completed ? '☑️' : '⬜'}
                     </Text>
                   </TouchableOpacity>
-  
+
                   <View style={styles.taskTextBox}>
                     <Text
                       style={[
@@ -125,7 +157,7 @@ const AddTaskScreen = () => {
                       {task.about}
                     </Text>
                   </View>
-  
+
                   <TouchableOpacity onPress={() => handleDeleteTask(task.id)}>
                     <Text style={styles.deleteIcon}>🗑️</Text>
                   </TouchableOpacity>
@@ -137,7 +169,6 @@ const AddTaskScreen = () => {
       </KeyboardAvoidingView>
     </ImageBackground>
   );
-  
 };
 
 export default AddTaskScreen;
