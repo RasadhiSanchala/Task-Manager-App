@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NavBar from '../components/NavBar'; // ✅ nav bar component
 
 type Task = {
   id: number;
@@ -29,6 +30,7 @@ const AddTaskScreen = () => {
   const [about, setAbout] = useState('');
   const [tasks, setTasks] = useState<Task[]>([]);
   const [nextId, setNextId] = useState(1);
+  const [showNav, setShowNav] = useState(false); // ✅ for toggle
 
   // 🧠 Load stored tasks on app start
   useEffect(() => {
@@ -96,10 +98,17 @@ const AddTaskScreen = () => {
         style={{ flex: 1 }}
       >
         <View style={{ flex: 1 }}>
+          {/* 🔼 Nav toggle icon */}
           <View style={styles.header}>
-            <Image source={require('../assets/toggle.png')} style={styles.toggleIcon} />
+            <TouchableOpacity onPress={() => setShowNav(!showNav)}>
+              <Image source={require('../assets/toggle.png')} style={styles.toggleIcon} />
+            </TouchableOpacity>
           </View>
 
+          {/* ✅ NavBar displayed if showNav is true */}
+          <NavBar visible={showNav} onClose={() => setShowNav(false)} />
+
+          {/* 🔽 Input fields */}
           <View style={styles.inputRow}>
             <View style={styles.inputsColumn}>
               <TextInput
@@ -123,6 +132,7 @@ const AddTaskScreen = () => {
             </TouchableOpacity>
           </View>
 
+          {/* 🔽 Task List */}
           <ScrollView
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingBottom: 100 }}
