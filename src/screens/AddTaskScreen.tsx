@@ -63,14 +63,11 @@ const AddTaskScreen = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
-        <ScrollView
-          contentContainerStyle={{ paddingBottom: 100 }}
-          keyboardShouldPersistTaps="handled"
-        >
+        <View style={{ flex: 1 }}>
           <View style={styles.header}>
             <Image source={require('../assets/toggle.png')} style={styles.toggleIcon} />
           </View>
-
+  
           <View style={styles.inputRow}>
             <View style={styles.inputsColumn}>
               <TextInput
@@ -88,52 +85,59 @@ const AddTaskScreen = () => {
                 placeholderTextColor="#A66CFF"
               />
             </View>
-
+  
             <TouchableOpacity style={styles.plusButton} onPress={handleAddTask}>
               <Text style={styles.plusText}>+</Text>
             </TouchableOpacity>
           </View>
-
-          {tasks.length === 0 ? (
-            <Text style={styles.noTasksText}>No tasks yet</Text>
-          ) : (
-            tasks.map(task => (
-              <View key={task.id} style={styles.taskBox}>
-                <TouchableOpacity onPress={() => handleToggleComplete(task.id)}>
-                  <Text style={{ fontSize: 20 }}>
-                    {task.completed ? '☑️' : '⬜'}
-                  </Text>
-                </TouchableOpacity>
-
-                <View style={styles.taskTextBox}>
-                  <Text
-                    style={[
-                      styles.taskTitle,
-                      task.completed && styles.completedText,
-                    ]}
-                  >
-                    {task.title}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.taskAbout,
-                      task.completed && styles.completedText,
-                    ]}
-                  >
-                    {task.about}
-                  </Text>
+  
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ paddingBottom: 100 }}
+            keyboardShouldPersistTaps="handled"
+          >
+            {tasks.length === 0 ? (
+              <Text style={styles.noTasksText}>No tasks yet</Text>
+            ) : (
+              tasks.map(task => (
+                <View key={task.id} style={styles.taskBox}>
+                  <TouchableOpacity onPress={() => handleToggleComplete(task.id)}>
+                    <Text style={{ fontSize: 20 }}>
+                      {task.completed ? '☑️' : '⬜'}
+                    </Text>
+                  </TouchableOpacity>
+  
+                  <View style={styles.taskTextBox}>
+                    <Text
+                      style={[
+                        styles.taskTitle,
+                        task.completed && styles.completedText,
+                      ]}
+                    >
+                      {task.title}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.taskAbout,
+                        task.completed && styles.completedText,
+                      ]}
+                    >
+                      {task.about}
+                    </Text>
+                  </View>
+  
+                  <TouchableOpacity onPress={() => handleDeleteTask(task.id)}>
+                    <Text style={styles.deleteIcon}>🗑️</Text>
+                  </TouchableOpacity>
                 </View>
-
-                <TouchableOpacity onPress={() => handleDeleteTask(task.id)}>
-                  <Text style={styles.deleteIcon}>🗑️</Text>
-                </TouchableOpacity>
-              </View>
-            ))
-          )}
-        </ScrollView>
+              ))
+            )}
+          </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </ImageBackground>
   );
+  
 };
 
 export default AddTaskScreen;
