@@ -15,8 +15,6 @@ const NavBar: React.FC<NavBarProps> = ({ visible, onClose }) => {
 
   if (!visible) return null;
 
-
-
   return (
     <TouchableWithoutFeedback onPress={onClose}>
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9 }}>
@@ -30,17 +28,35 @@ const NavBar: React.FC<NavBarProps> = ({ visible, onClose }) => {
 
             {/* Menu items */}
             <View style={styles.navBar}>
-              <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('AddTask')} >
+              <TouchableOpacity
+                style={styles.navItem}
+                onPress={() => {
+                  onClose();
+                  navigation.navigate('AddTask');
+                }}
+              >
                 <Image source={require('../assets/newTask.png')} style={styles.icon} />
                 <Text style={styles.navText}>New Task</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('OngoingTask')} >
+              <TouchableOpacity
+                style={styles.navItem}
+                onPress={() => {
+                  onClose();
+                  navigation.navigate('OngoingTask');
+                }}
+              >
                 <Image source={require('../assets/ongoingTask.png')} style={styles.icon} />
                 <Text style={styles.navText}>Ongoing Task</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('CompletedTask')} >
+              <TouchableOpacity
+                style={styles.navItem}
+                onPress={() => {
+                  onClose();
+                  navigation.navigate('CompletedTask');
+                }}
+              >
                 <Image source={require('../assets/completedTask.png')} style={styles.icon} />
                 <Text style={styles.navText}>Completed Task</Text>
               </TouchableOpacity>
