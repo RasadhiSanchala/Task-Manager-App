@@ -14,6 +14,7 @@ type TaskContextType = {
   addTask: (task: { title: string; about: string }) => void;
   toggleTaskCompletion: (id: number) => void;
   deleteTask: (id: number) => void;
+  editTask: (id: number, newTitle: string, newAbout: string) => void;
 };
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
@@ -43,18 +44,30 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setNextId(prev => prev + 1);
   };
 
-  const toggleTaskCompletion = (id: number) => {
+  const editTask = (id: number, newTitle: string, newAbout: string) => {
     setTasks(prev =>
-      prev.map(t => (t.id === id ? { ...t, completed: !t.completed } : t))
+      prev.map(task =>
+        task.id === id ? { ...task, title: newTitle, about: newAbout } : task
+      )
     );
   };
+  
+
+  const toggleTaskCompletion = (taskId: number) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === taskId ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
+  
 
   const deleteTask = (id: number) => {
     setTasks(prev => prev.filter(t => t.id !== id));
   };
 
   return (
-    <TaskContext.Provider value={{ tasks, addTask, toggleTaskCompletion, deleteTask }}>
+    <TaskContext.Provider value={{ tasks, addTask, toggleTaskCompletion, deleteTask, editTask }}>
       {children}
     </TaskContext.Provider>
   );
