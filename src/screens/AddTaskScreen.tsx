@@ -16,6 +16,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import NavBar from '../components/NavBar';
 import ConfirmDeletePopup from '../components/ConfirmDeletePopup';
+import EditTaskPopup from '../components/EditTaskPopup'; 
 import { useTasks } from '../store/TaskContext';
 
 const AddTaskScreen = () => {
@@ -27,7 +28,14 @@ const AddTaskScreen = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null); 
 
-  const { tasks, addTask, toggleTaskCompletion, deleteTask } = useTasks();
+  const [editingTask, setEditingTask] = useState<null | {
+    id: number;
+    title: string;
+    about: string;
+  }>(null); 
+  
+
+  const { tasks, addTask, toggleTaskCompletion, deleteTask, editTask } = useTasks();
 
   const handleAddTask = () => {
     if (title.trim() === '' || about.trim() === '') return;
@@ -59,6 +67,17 @@ const AddTaskScreen = () => {
     setShowConfirm(false);
   };
 
+  const handleEdit = (task: { id: number; title: string; about: string }) => {
+    setEditingTask(task); 
+  };
+
+  const handleSaveEdit = (updatedTitle: string, updatedAbout: string) => {
+    if (editingTask) {
+      editTask(editingTask.id, updatedTitle, updatedAbout);
+      setEditingTask(null); 
+    }
+  };
+
   return (
     <ImageBackground source={require('../assets/bg.png')} style={styles.background}>
       <KeyboardAvoidingView
@@ -66,7 +85,6 @@ const AddTaskScreen = () => {
         style={{ flex: 1 }}
       >
         <View style={{ flex: 1 }}>
-       
           <View style={styles.header}>
             <TouchableOpacity onPress={() => setShowNav(!showNav)}>
               <Image source={require('../assets/toggle.png')} style={styles.toggleIcon} />
@@ -75,7 +93,6 @@ const AddTaskScreen = () => {
 
           <NavBar visible={showNav} onClose={() => setShowNav(false)} />
 
-         
           <View style={styles.inputRow}>
             <View style={styles.inputsColumn}>
               <TextInput
@@ -99,7 +116,6 @@ const AddTaskScreen = () => {
             </TouchableOpacity>
           </View>
 
-         
           <ScrollView
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingBottom: 100 }}
@@ -127,6 +143,14 @@ const AddTaskScreen = () => {
                     </Text>
                   </View>
 
+                 
+                  <TouchableOpacity
+                    onPress={() => handleEdit({ id: task.id, title: task.title, about: task.about })}
+                  >
+                    <Text style={styles.deleteIcon}>✏️</Text>
+                  </TouchableOpacity>
+
+                 
                   <TouchableOpacity onPress={() => handleConfirmDelete(task.id)}>
                     <Text style={styles.deleteIcon}>🗑️</Text>
                   </TouchableOpacity>
@@ -136,12 +160,23 @@ const AddTaskScreen = () => {
           </ScrollView>
         </View>
 
-       
+        
         <ConfirmDeletePopup
           visible={showConfirm} 
           onConfirm={handleDelete}
           onCancel={handleCancel}
         />
+
+        
+        {editingTask && (
+          <EditTaskPopup
+            visible={true}
+            initialTitle={editingTask.title}
+            initialAbout={editingTask.about}
+            onCancel={() => setEditingTask(null)}
+            onSave={handleSaveEdit}
+          />
+        )}
       </KeyboardAvoidingView>
     </ImageBackground>
   );
