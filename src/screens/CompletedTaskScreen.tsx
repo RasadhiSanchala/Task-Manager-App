@@ -6,12 +6,13 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import styles from '../styles/completedStyles'; // Correct styling import
+import styles from '../styles/completedStyles'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NavBar from '../components/NavBar';
 import { NavigationProp } from '@react-navigation/native';
 
-// Define the types for the Task object
+
+
 interface Task {
   id: string;
   title: string;
@@ -20,11 +21,11 @@ interface Task {
 }
 
 type CompletedTaskScreenProps = {
-  navigation: NavigationProp<any>; // Type for navigation
+  navigation: NavigationProp<any>; 
 };
 
 const CompletedTaskScreen = ({ navigation }: CompletedTaskScreenProps) => {
-  const [tasks, setTasks] = useState<Task[]>([]); // State type is Task[]
+  const [tasks, setTasks] = useState<Task[]>([]); 
   const [showNav, setShowNav] = useState(false);
 
   useEffect(() => {
@@ -49,7 +50,6 @@ const CompletedTaskScreen = ({ navigation }: CompletedTaskScreenProps) => {
   return (
     <ImageBackground source={require('../assets/bg.png')} style={styles.background}>
       <View style={{ flex: 1 }}>
-        {/* Toggle nav */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => setShowNav(!showNav)}>
             <Text style={styles.toggleIcon}>☰</Text>
