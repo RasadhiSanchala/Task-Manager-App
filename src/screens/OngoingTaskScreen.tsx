@@ -31,8 +31,13 @@ const OngoingTaskScreen = () => {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editAbout, setEditAbout] = useState('');
+  const [editingTask, setEditingTask] = useState<null | {
+    id: number;
+    title: string;
+    about: string;
+  }>(null);
 
-  // Refresh ongoing tasks whenever the screen is focused
+
   useEffect(() => {
     const updateOngoingTasks = () => {
       const ongoing = tasks.filter(task => !task.completed);
@@ -43,19 +48,32 @@ const OngoingTaskScreen = () => {
     return unsubscribe;
   }, [navigation, tasks]);
 
+
   const openEditPopup = (task: Task) => {
-    setSelectedTaskId(task.id);
-    setEditTitle(task.title);
-    setEditAbout(task.about);
-    setShowEdit(true);
+    setEditingTask({
+      id: task.id,
+      title: task.title,
+      about: task.about,
+    });
   };
 
-  const handleEditSave = () => {
-    if (selectedTaskId !== null) {
-      editTask(selectedTaskId, editTitle, editAbout);
-      setShowEdit(false);
+  const handleSaveEdit = (updatedTitle: string, updatedAbout: string) => {
+    if (editingTask) {
+      editTask(editingTask.id, updatedTitle, updatedAbout);
+
+
+      setOngoingTasks(prevTasks =>
+        prevTasks.map(task =>
+          task.id === editingTask.id
+            ? { ...task, title: updatedTitle, about: updatedAbout }
+            : task
+        )
+      );
+
+      setEditingTask(null);
     }
   };
+
 
   const handleConfirmDelete = (id: number) => {
     setSelectedTaskId(id);
@@ -65,52 +83,59 @@ const OngoingTaskScreen = () => {
   const handleDelete = () => {
     if (selectedTaskId !== null) {
       deleteTask(selectedTaskId);
+
+      setOngoingTasks(prevTasks =>
+        prevTasks.filter(task => task.id !== selectedTaskId)
+      );
+
       setShowConfirm(false);
+      setSelectedTaskId(null);
     }
   };
 
+
   const handleToggleCompletion = (taskId: number) => {
-    // Toggle in context
+
     toggleTaskCompletion(taskId);
-  
-    // Immediately remove the completed task from the local ongoingTasks list
+
+
     setOngoingTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
   };
 
   return (
     <ImageBackground source={require('../assets/bg.png')} style={styles.background}>
       <View style={{ flex: 1 }}>
-        {/* Header with nav toggle */}
+
         <View style={styles.header}>
           <TouchableOpacity onPress={() => setShowNav(!showNav)}>
             <Text style={styles.toggleIcon}>☰</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Navigation bar */}
+
         <NavBar visible={showNav} onClose={() => setShowNav(false)} />
 
-        {/* Task list */}
+
         <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 100 }}>
           {ongoingTasks.length === 0 ? (
             <Text style={styles.noTasksText}>No ongoing tasks</Text>
           ) : (
             ongoingTasks.map(task => (
               <View key={task.id} style={styles.taskBox}>
-                {/* Checkbox */}
+
                 <TouchableOpacity onPress={() => handleToggleCompletion(task.id)}>
                   <Text style={{ fontSize: 20 }}>
                     {task.completed ? '☑️' : '⬜'}
                   </Text>
                 </TouchableOpacity>
 
-                {/* Task Texts */}
+
                 <View style={styles.taskTextBox}>
                   <Text style={styles.taskTitle}>{task.title}</Text>
                   <Text style={styles.taskAbout}>{task.about}</Text>
                 </View>
 
-                {/* Edit & Delete */}
+
                 <View style={styles.actionIcons}>
                   <TouchableOpacity onPress={() => openEditPopup(task)}>
                     <Text style={styles.editIcon}>✏️</Text>
@@ -124,22 +149,22 @@ const OngoingTaskScreen = () => {
           )}
         </ScrollView>
 
-        {/* Popups */}
+
         <ConfirmDeletePopup
           visible={showConfirm}
           onConfirm={handleDelete}
           onCancel={() => setShowConfirm(false)}
         />
 
-        <EditTaskPopup
-          visible={showEdit}
-          title={editTitle}
-          about={editAbout}
-          onChangeTitle={setEditTitle}
-          onChangeAbout={setEditAbout}
-          onSave={handleEditSave}
-          onCancel={() => setShowEdit(false)}
-        />
+        {editingTask && (
+          <EditTaskPopup
+            visible={true}
+            initialTitle={editingTask.title}
+            initialAbout={editingTask.about}
+            onCancel={() => setEditingTask(null)}
+            onSave={handleSaveEdit}
+          />
+        )}
       </View>
     </ImageBackground>
   );
