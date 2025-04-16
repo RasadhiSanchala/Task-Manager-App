@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -14,81 +14,27 @@ import styles from '../styles/addTaskStyles';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import NavBar from '../components/NavBar'; // ✅ nav bar component
-
-type Task = {
-  id: number;
-  title: string;
-  about: string;
-  completed: boolean;
-};
+import NavBar from '../components/NavBar';
+import { useTasks } from '../store/TaskContext'; // ✅ shared task context
 
 const AddTaskScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [title, setTitle] = useState('');
   const [about, setAbout] = useState('');
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [nextId, setNextId] = useState(1);
-  const [showNav, setShowNav] = useState(false); // ✅ for toggle
+  const [showNav, setShowNav] = useState(false);
 
-  // 🧠 Load stored tasks on app start
-  useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        const savedTasks = await AsyncStorage.getItem('tasks');
-        const savedNextId = await AsyncStorage.getItem('nextId');
-
-        if (savedTasks) setTasks(JSON.parse(savedTasks));
-        if (savedNextId) setNextId(parseInt(savedNextId));
-      } catch (e) {
-        console.error('Failed to load tasks:', e);
-      }
-    };
-
-    loadTasks();
-  }, []);
-
-  // 💾 Save tasks every time they change
-  useEffect(() => {
-    const saveTasks = async () => {
-      try {
-        await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
-        await AsyncStorage.setItem('nextId', nextId.toString());
-      } catch (e) {
-        console.error('Failed to save tasks:', e);
-      }
-    };
-
-    saveTasks();
-  }, [tasks, nextId]);
+  const { tasks, addTask, toggleTaskCompletion, deleteTask } = useTasks(); // ✅ use context
 
   const handleAddTask = () => {
     if (title.trim() === '' || about.trim() === '') return;
 
-    const newTask: Task = {
-      id: nextId,
+    addTask({
       title: title.trim(),
       about: about.trim(),
-      completed: false,
-    };
+    });
 
-    setTasks([...tasks, newTask]);
-    setNextId(nextId + 1);
     setTitle('');
     setAbout('');
-  };
-
-  const handleToggleComplete = (id: number) => {
-    setTasks(prev =>
-      prev.map(task =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
-
-  const handleDeleteTask = (id: number) => {
-    setTasks(prev => prev.filter(task => task.id !== id));
   };
 
   return (
@@ -98,17 +44,16 @@ const AddTaskScreen = () => {
         style={{ flex: 1 }}
       >
         <View style={{ flex: 1 }}>
-          {/* 🔼 Nav toggle icon */}
+          {/* 🔼 Nav toggle */}
           <View style={styles.header}>
             <TouchableOpacity onPress={() => setShowNav(!showNav)}>
               <Image source={require('../assets/toggle.png')} style={styles.toggleIcon} />
             </TouchableOpacity>
           </View>
 
-          {/* ✅ NavBar displayed if showNav is true */}
           <NavBar visible={showNav} onClose={() => setShowNav(false)} />
 
-          {/* 🔽 Input fields */}
+          {/* 🔽 Input */}
           <View style={styles.inputRow}>
             <View style={styles.inputsColumn}>
               <TextInput
@@ -143,32 +88,24 @@ const AddTaskScreen = () => {
             ) : (
               tasks.map(task => (
                 <View key={task.id} style={styles.taskBox}>
-                  <TouchableOpacity onPress={() => handleToggleComplete(task.id)}>
-                    <Text style={{ fontSize: 20 }}>
-                      {task.completed ? '☑️' : '⬜'}
-                    </Text>
+                  <TouchableOpacity onPress={() => toggleTaskCompletion(task.id)}>
+                    <Text style={{ fontSize: 20 }}>{task.completed ? '☑️' : '⬜'}</Text>
                   </TouchableOpacity>
 
                   <View style={styles.taskTextBox}>
                     <Text
-                      style={[
-                        styles.taskTitle,
-                        task.completed && styles.completedText,
-                      ]}
+                      style={[styles.taskTitle, task.completed && styles.completedText]}
                     >
                       {task.title}
                     </Text>
                     <Text
-                      style={[
-                        styles.taskAbout,
-                        task.completed && styles.completedText,
-                      ]}
+                      style={[styles.taskAbout, task.completed && styles.completedText]}
                     >
                       {task.about}
                     </Text>
                   </View>
 
-                  <TouchableOpacity onPress={() => handleDeleteTask(task.id)}>
+                  <TouchableOpacity onPress={() => deleteTask(task.id)}>
                     <Text style={styles.deleteIcon}>🗑️</Text>
                   </TouchableOpacity>
                 </View>
