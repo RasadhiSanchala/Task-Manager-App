@@ -36,12 +36,23 @@ const ongoingTaskStyles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
   },
+
+  // ✅ Action icon container
+  actionIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12, // some spacing between ✏️ and 🗑️
+  },
+  editIcon: {
+    fontSize: 18,
+    color: '#00FFDD',
+    marginRight: 8,
+  },
   deleteIcon: {
     fontSize: 18,
     color: '#A66CFF',
   },
 
-  // ✅ Newly added
   header: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -51,6 +62,7 @@ const ongoingTaskStyles = StyleSheet.create({
     fontSize: 28,
     color: '#fff',
   },
+ 
 });
 
 export default ongoingTaskStyles;
