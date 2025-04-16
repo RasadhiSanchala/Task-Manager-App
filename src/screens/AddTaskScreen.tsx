@@ -15,7 +15,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import NavBar from '../components/NavBar';
-import { useTasks } from '../store/TaskContext'; // ✅ shared task context
+import ConfirmDeletePopup from '../components/ConfirmDeletePopup';
+import { useTasks } from '../store/TaskContext';
 
 const AddTaskScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -23,7 +24,10 @@ const AddTaskScreen = () => {
   const [about, setAbout] = useState('');
   const [showNav, setShowNav] = useState(false);
 
-  const { tasks, addTask, toggleTaskCompletion, deleteTask } = useTasks(); // ✅ use context
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null); 
+
+  const { tasks, addTask, toggleTaskCompletion, deleteTask } = useTasks();
 
   const handleAddTask = () => {
     if (title.trim() === '' || about.trim() === '') return;
@@ -37,6 +41,24 @@ const AddTaskScreen = () => {
     setAbout('');
   };
 
+  const handleConfirmDelete = (taskId: number) => { 
+    setSelectedTaskId(taskId);
+    setShowConfirm(true);
+  };
+
+  const handleDelete = () => {
+    if (selectedTaskId !== null) {
+      deleteTask(selectedTaskId);
+    }
+    setSelectedTaskId(null);
+    setShowConfirm(false);
+  };
+
+  const handleCancel = () => {
+    setSelectedTaskId(null);
+    setShowConfirm(false);
+  };
+
   return (
     <ImageBackground source={require('../assets/bg.png')} style={styles.background}>
       <KeyboardAvoidingView
@@ -44,7 +66,7 @@ const AddTaskScreen = () => {
         style={{ flex: 1 }}
       >
         <View style={{ flex: 1 }}>
-          {/* 🔼 Nav toggle */}
+       
           <View style={styles.header}>
             <TouchableOpacity onPress={() => setShowNav(!showNav)}>
               <Image source={require('../assets/toggle.png')} style={styles.toggleIcon} />
@@ -53,7 +75,7 @@ const AddTaskScreen = () => {
 
           <NavBar visible={showNav} onClose={() => setShowNav(false)} />
 
-          {/* 🔽 Input */}
+         
           <View style={styles.inputRow}>
             <View style={styles.inputsColumn}>
               <TextInput
@@ -77,7 +99,7 @@ const AddTaskScreen = () => {
             </TouchableOpacity>
           </View>
 
-          {/* 🔽 Task List */}
+         
           <ScrollView
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingBottom: 100 }}
@@ -105,7 +127,7 @@ const AddTaskScreen = () => {
                     </Text>
                   </View>
 
-                  <TouchableOpacity onPress={() => deleteTask(task.id)}>
+                  <TouchableOpacity onPress={() => handleConfirmDelete(task.id)}>
                     <Text style={styles.deleteIcon}>🗑️</Text>
                   </TouchableOpacity>
                 </View>
@@ -113,6 +135,13 @@ const AddTaskScreen = () => {
             )}
           </ScrollView>
         </View>
+
+       
+        <ConfirmDeletePopup
+          visible={showConfirm} 
+          onConfirm={handleDelete}
+          onCancel={handleCancel}
+        />
       </KeyboardAvoidingView>
     </ImageBackground>
   );
