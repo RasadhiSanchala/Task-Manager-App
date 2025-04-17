@@ -147,12 +147,12 @@ const AddTaskScreen = () => {
                   <TouchableOpacity
                     onPress={() => handleEdit({ id: task.id, title: task.title, about: task.about })}
                   >
-                    <Text style={styles.deleteIcon}>✏️</Text>
+                    <Image source={require('../assets/editIcon1.png')} style={styles.editIcon} />
                   </TouchableOpacity>
 
                  
                   <TouchableOpacity onPress={() => handleConfirmDelete(task.id)}>
-                    <Text style={styles.deleteIcon}>🗑️</Text>
+                  <Image source={require('../assets/deleteIcon.png')} style={styles.editIcon} />
                   </TouchableOpacity>
                 </View>
               ))
