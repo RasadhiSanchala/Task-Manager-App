@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
+  Image,
   ScrollView,
   ImageBackground,
   TouchableOpacity,
@@ -27,10 +28,7 @@ const OngoingTaskScreen = () => {
   const [ongoingTasks, setOngoingTasks] = useState<Task[]>([]);
   const [showNav, setShowNav] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
-  const [editTitle, setEditTitle] = useState('');
-  const [editAbout, setEditAbout] = useState('');
   const [editingTask, setEditingTask] = useState<null | {
     id: number;
     title: string;
@@ -138,10 +136,10 @@ const OngoingTaskScreen = () => {
 
                 <View style={styles.actionIcons}>
                   <TouchableOpacity onPress={() => openEditPopup(task)}>
-                    <Text style={styles.editIcon}>✏️</Text>
+                  <Image source={require('../assets/editIcon1.png')} style={styles.editIcon} />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => handleConfirmDelete(task.id)}>
-                    <Text style={styles.deleteIcon}>🗑️</Text>
+                  <Image source={require('../assets/deleteIcon.png')} style={styles.editIcon} />
                   </TouchableOpacity>
                 </View>
               </View>

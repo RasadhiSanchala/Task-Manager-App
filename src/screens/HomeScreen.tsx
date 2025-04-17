@@ -3,7 +3,7 @@ import { View, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import styles from '../styles/homeStyles';
-import { RootStackParamList } from '../types/navigation'; // your defined types
+import { RootStackParamList } from '../types/navigation'; 
 
 const HomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -19,7 +19,7 @@ const HomeScreen = () => {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('AddTask')} // ← or 'Tasks' when you add it
+          onPress={() => navigation.navigate('AddTask')}
         >
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>

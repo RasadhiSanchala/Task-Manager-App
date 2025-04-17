@@ -3,6 +3,7 @@ import {
   View,
   Text,
   ScrollView,
+  Image,
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
@@ -11,6 +12,7 @@ import NavBar from '../components/NavBar';
 import { useNavigation } from '@react-navigation/native';
 import ConfirmDeletePopup from '../components/ConfirmDeletePopup';
 import { useTasks } from '../store/TaskContext';
+import { useDeleteTask } from '../hooks/useDeleteTask';
 
 interface Task {
   id: number;
@@ -60,17 +62,17 @@ const CompletedTaskScreen = () => {
     <ImageBackground source={require('../assets/bg.png')} style={styles.background}>
       <View style={{ flex: 1 }}>
 
-        
+
         <View style={styles.header}>
           <TouchableOpacity onPress={() => setShowNav(!showNav)}>
             <Text style={styles.toggleIcon}>☰</Text>
           </TouchableOpacity>
         </View>
 
-        
+
         <NavBar visible={showNav} onClose={() => setShowNav(false)} />
 
-       
+
         <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 100 }}>
           {completedTasks.length === 0 ? (
             <Text style={styles.noTasksText}>No completed tasks</Text>
@@ -85,14 +87,14 @@ const CompletedTaskScreen = () => {
                 </View>
 
                 <TouchableOpacity onPress={() => handleConfirmDelete(task.id)}>
-                  <Text style={styles.deleteIcon}>🗑️</Text>
+                <Image source={require('../assets/deleteIcon.png')} style={styles.editIcon} />
                 </TouchableOpacity>
               </View>
             ))
           )}
         </ScrollView>
 
-        
+
         <ConfirmDeletePopup
           visible={showConfirm}
           onConfirm={handleDelete}

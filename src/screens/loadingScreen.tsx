@@ -6,7 +6,7 @@ import styles from '../styles/loadingStyles';
 import { RootStackParamList } from '../types/navigation';
 
 const LoadingScreen = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();//Hey TypeScript, I’m using a stack navigator with these screen. Guide me with autocomplete & catch my mistakes.
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     const timer = setTimeout(() => {
