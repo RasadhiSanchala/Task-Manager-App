@@ -92,6 +92,11 @@ const addTaskStyles = StyleSheet.create({
     fontSize: 18,
     color: '#A66CFF',
   },
+  editIcon: {
+    width:20,
+    height:20,
+    marginRight:10,
+  }
 });
 
 export default addTaskStyles;

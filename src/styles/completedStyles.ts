@@ -49,9 +49,9 @@ const completedTaskStyles = StyleSheet.create({
     textDecorationLine: 'line-through',
     opacity: 0.6,
   },
-  deleteIcon: {
-    fontSize: 18,
-    color: '#A66CFF',
+  editIcon: {
+    width:20,
+    height:20,
   },
   completedIcon: {
     fontSize: 20,

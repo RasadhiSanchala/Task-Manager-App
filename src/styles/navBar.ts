@@ -3,12 +3,12 @@ import { StyleSheet } from 'react-native';
 const navBarStyles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 0,
-    left: 0,
+    top: -18,
+    left: -20,
     width: '70%',
     height: '100%',
     backgroundColor: 'black',
-    zIndex: 10, // ensures it's above other content
+    zIndex: 10, 
   },
 
   header: {

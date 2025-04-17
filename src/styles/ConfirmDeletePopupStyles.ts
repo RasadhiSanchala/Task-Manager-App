@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
     padding: 25,
     alignItems: 'center',
     width: '75%',
+    borderTopWidth: 4,
+    borderTopColor: '#B547FF',
+    zIndex: 999,
   },
   title: {
     color: 'white',

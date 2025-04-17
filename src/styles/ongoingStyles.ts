@@ -43,14 +43,14 @@ const ongoingTaskStyles = StyleSheet.create({
     alignItems: 'center',
     gap: 12, // some spacing between ✏️ and 🗑️
   },
-  editIcon: {
-    fontSize: 18,
-    color: '#00FFDD',
-    marginRight: 8,
-  },
   deleteIcon: {
     fontSize: 18,
     color: '#A66CFF',
+  },
+  editIcon: {
+    width:20,
+    height:20,
+    marginRight:10,
   },
 
   header: {
