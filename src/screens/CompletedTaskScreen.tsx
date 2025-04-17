@@ -6,77 +6,98 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import styles from '../styles/completedStyles'; 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from '../styles/completedStyles';
 import NavBar from '../components/NavBar';
-import { NavigationProp } from '@react-navigation/native';
-
-
+import { useNavigation } from '@react-navigation/native';
+import ConfirmDeletePopup from '../components/ConfirmDeletePopup';
+import { useTasks } from '../store/TaskContext';
 
 interface Task {
-  id: string;
+  id: number;
   title: string;
   about: string;
   completed: boolean;
 }
 
-type CompletedTaskScreenProps = {
-  navigation: NavigationProp<any>; 
-};
+const CompletedTaskScreen = () => {
+  const navigation = useNavigation();
+  const { tasks, deleteTask } = useTasks();
 
-const CompletedTaskScreen = ({ navigation }: CompletedTaskScreenProps) => {
-  const [tasks, setTasks] = useState<Task[]>([]); 
+  const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
   const [showNav, setShowNav] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
 
   useEffect(() => {
-    const loadTasks = async () => {
-      console.log('Loading tasks...');
-      try {
-        const storedTasks = await AsyncStorage.getItem('tasks');
-        if (storedTasks) {
-          const parsedTasks: Task[] = JSON.parse(storedTasks);
-          const filtered = parsedTasks.filter((task) => task.completed);
-          setTasks(filtered);
-        }
-      } catch (e) {
-        console.error('Failed to load tasks:', e);
-      }
+    const updateCompletedTasks = () => {
+      const completed = tasks.filter(task => task.completed);
+      setCompletedTasks(completed);
     };
-  
-    const unsubscribe = navigation.addListener('focus', loadTasks);
+
+    const unsubscribe = navigation.addListener('focus', updateCompletedTasks);
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, tasks]);
+
+  const handleConfirmDelete = (id: number) => {
+    setSelectedTaskId(id);
+    setShowConfirm(true);
+  };
+
+  const handleDelete = () => {
+    if (selectedTaskId !== null) {
+      deleteTask(selectedTaskId);
+
+      setCompletedTasks(prevTasks =>
+        prevTasks.filter(task => task.id !== selectedTaskId)
+      );
+
+      setShowConfirm(false);
+      setSelectedTaskId(null);
+    }
+  };
 
   return (
     <ImageBackground source={require('../assets/bg.png')} style={styles.background}>
       <View style={{ flex: 1 }}>
+
+        
         <View style={styles.header}>
           <TouchableOpacity onPress={() => setShowNav(!showNav)}>
             <Text style={styles.toggleIcon}>☰</Text>
           </TouchableOpacity>
         </View>
 
+        
         <NavBar visible={showNav} onClose={() => setShowNav(false)} />
 
+       
         <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 100 }}>
-          {tasks.length === 0 ? (
+          {completedTasks.length === 0 ? (
             <Text style={styles.noTasksText}>No completed tasks</Text>
           ) : (
-            tasks.map((task) => (
+            completedTasks.map(task => (
               <View key={task.id} style={styles.taskBox}>
-                <Text style={{ fontSize: 20 }}>☑️</Text>
+                <Text style={styles.completedIcon}>☑️</Text>
+
                 <View style={styles.taskTextBox}>
-                  <Text style={[styles.taskTitle, styles.completedText]}>
-                    {task.title}
-                  </Text>
-                  <Text style={[styles.taskAbout, styles.completedText]}>
-                    {task.about}
-                  </Text>
+                  <Text style={styles.taskTitle}>{task.title}</Text>
+                  <Text style={styles.taskAbout}>{task.about}</Text>
                 </View>
+
+                <TouchableOpacity onPress={() => handleConfirmDelete(task.id)}>
+                  <Text style={styles.deleteIcon}>🗑️</Text>
+                </TouchableOpacity>
               </View>
             ))
           )}
         </ScrollView>
+
+        
+        <ConfirmDeletePopup
+          visible={showConfirm}
+          onConfirm={handleDelete}
+          onCancel={() => setShowConfirm(false)}
+        />
       </View>
     </ImageBackground>
   );
