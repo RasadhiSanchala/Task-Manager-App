@@ -9,11 +9,11 @@ const completedTaskStyles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,  // Adjusted for better header space
+    marginBottom: 20,
   },
   toggleIcon: {
     fontSize: 30,
-    color: '#fff', // Adjust icon color
+    color: '#fff',
   },
   noTasksText: {
     textAlign: 'center',
@@ -53,6 +53,12 @@ const completedTaskStyles = StyleSheet.create({
     fontSize: 18,
     color: '#A66CFF',
   },
+  completedIcon: {
+    fontSize: 20,
+    color: '#4CAF50', 
+    marginRight: 10,
+  },
+  
 });
 
 export default completedTaskStyles;
