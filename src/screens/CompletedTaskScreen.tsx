@@ -12,7 +12,7 @@ import NavBar from '../components/NavBar';
 import { useNavigation } from '@react-navigation/native';
 import ConfirmDeletePopup from '../components/ConfirmDeletePopup';
 import { useTasks } from '../store/TaskContext';
-import { useDeleteTask } from '../hooks/useDeleteTask';
+
 
 interface Task {
   id: number;
