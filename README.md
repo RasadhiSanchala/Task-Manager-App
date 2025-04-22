@@ -9,7 +9,7 @@ This app helps users easily manage daily tasks with features like **adding**, **
 ## 🎥 Demo & Design
 
 📹 **Demo Video**: [Watch here](https://klnaclk-my.sharepoint.com/personal/sanchal-se21021_stu_kln_ac_lk/_layouts/15/stream.aspx?id=%2Fpersonal%2Fsanchal-se21021_stu_kln_ac_lk%2FDocuments%2FMobile%20App%20Development%20-%20To-do%20APP%2FTo-do%20App%2Emp4)  
-🎨 **Figma Design (strictly followed)**: [Figma Link](https://www.figma.com/design/0voUh3g2fDdGMbKNibqygj/To-Do-List-(Community)?node-id=42-188&p=f&t=PYitSXbMjt9piMOo-0)
+🎨 **Figma Design (strictly followed)**: [Figma Link](https://www.figma.com/design/kAsgSdWrAHEBa6UphlJ97k/Mobile-To-Do-App---SE-2021-021?node-id=0-1&t=DKziQMdqAPjB9Fip-1)
 
 ---
 
