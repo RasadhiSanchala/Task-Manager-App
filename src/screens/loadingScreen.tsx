@@ -3,7 +3,7 @@ import { View, ImageBackground, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import styles from '../styles/loadingStyles';
-import { RootStackParamList } from '../types/navigation';
+import { RootStackParamList } from '../navigation/navigation';
 
 const LoadingScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();

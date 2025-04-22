@@ -13,7 +13,7 @@ import {
 import styles from '../styles/addTaskStyles';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types/navigation';
+import { RootStackParamList } from '../navigation/navigation';
 import NavBar from '../components/NavBar';
 import ConfirmDeletePopup from '../components/ConfirmDeletePopup';
 import EditTaskPopup from '../components/EditTaskPopup'; 
